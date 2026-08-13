@@ -35,15 +35,46 @@ RESET/CLOSE：任意态 → IDLE（幂等）
 
 ## 安装
 
-```bash
-npm install
-```
+1. **clone 到本地**
 
-依赖：`sherpa-onnx-node`（STT 识别）、`mpg123-decoder`（mp3 解码）、`edge-tts-universal`（TTS 合成）。peer 依赖 OpenClaw `>=2026.3.24-beta.2`。
+   ```bash
+   git clone https://github.com/wzkagms/openclaw-realtime-voice.git
+   cd openclaw-realtime-voice
+   ```
+
+2. **安装依赖**
+
+   ```bash
+   npm install
+   ```
+
+   依赖：`sherpa-onnx-node`（STT 识别）、`mpg123-decoder`（mp3 解码）、`edge-tts-universal`（TTS 合成）。peer 依赖 OpenClaw `>=2026.3.24-beta.2`。
+
+3. **在 openclaw.json 注册插件目录**：将插件目录加入 `plugins.load.paths`
+
+   ```json
+   {
+     "plugins": {
+       "load": {
+         "paths": ["D:/path/to/openclaw-realtime-voice"]
+       }
+     }
+   }
+   ```
+
+4. **配置 provider**：在 `providerConfig` 中填写 baseUrl / apiKey / model（apiKey 支持 env 引用，如 `process.env.DEEPSEEK_API_KEY`），详见下节「配置」。
+
+5. **下载模型并重启 gateway**
+
+   ```powershell
+   powershell -File scripts/download-models.ps1
+   ```
+
+   模型下载到 `models/`（见下节「模型下载」）后，重启 OpenClaw gateway 使插件生效。
 
 ## 配置
 
-在 OpenClaw 的 `openclaw.json` 中注册插件并配置 provider：
+在 OpenClaw 的 `openclaw.json` 中配置 provider：
 
 ```json
 {
@@ -62,7 +93,20 @@ npm install
 
 ## 模型下载
 
-STT 需要 sherpa streaming 模型（约 530MB）。`models/` 目录已 gitignore，请自行下载到 `models/` 下，模型目录须包含以下文件（布局见 `src/stt/sherpa-stt.js`）：
+STT 需要 sherpa streaming 模型（约 530MB），来源为 sherpa-onnx 官方 GitHub release：
+
+```
+https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-streaming-zipformer-bilingual-zh-en-2023-02-20.tar.bz2
+```
+
+Windows 一键下载（`scripts/download-models.ps1`，自动下载 → 解压 → 校验 4 文件到 `models/`）：
+
+```powershell
+powershell -File scripts/download-models.ps1          # 下载并校验
+powershell -File scripts/download-models.ps1 -DryRun  # 仅验证 URL 可达，不下载
+```
+
+`models/` 目录已 gitignore，模型目录须包含以下文件（布局见 `src/stt/sherpa-stt.js`）：
 
 ```
 models/
