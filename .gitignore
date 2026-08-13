@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Models (sherpa models ~530MB, download on demand)
+models/
+
+# Logs
+*.log
+
+# Temp / session files
+.tmp/
+*.tmp
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

@@ -1,0 +1,43 @@
+{
+  "name": "openclaw-realtime-voice",
+  "version": "1.0.0",
+  "description": "OpenClaw realtime voice provider: browser mic -> sherpa STT -> LLM -> edge-tts -> audio playback",
+  "main": "index.js",
+  "scripts": {
+    "test": "node scripts/state-machine-test.cjs && node scripts/llm-client-test.cjs && node scripts/tts-pipeline-test.cjs && node scripts/bridge-llm-tts-test.cjs",
+    "test:state-machine": "node scripts/state-machine-test.cjs",
+    "test:llm-client": "node scripts/llm-client-test.cjs",
+    "test:tts-pipeline": "node scripts/tts-pipeline-test.cjs",
+    "test:bridge": "node scripts/bridge-llm-tts-test.cjs",
+    "test:e2e": "node scripts/e2e-test.cjs",
+    "test:realtime-llm": "node scripts/realtime-llm-test.cjs",
+    "test:all": "node scripts/state-machine-test.cjs && node scripts/llm-client-test.cjs && node scripts/tts-pipeline-test.cjs && node scripts/bridge-llm-tts-test.cjs",
+    "test:agent-consult": "node scripts/agent-consult-test.cjs"
+  },
+  "keywords": [
+    "openclaw",
+    "plugin",
+    "realtime-voice",
+    "tts"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "peerDependencies": {
+    "openclaw": ">=2026.3.24-beta.2"
+  },
+  "openclaw": {
+    "extensions": [
+      "./index.js"
+    ],
+    "compat": {
+      "pluginApi": ">=2026.3.24-beta.2",
+      "minGatewayVersion": "2026.3.24-beta.2"
+    }
+  },
+  "dependencies": {
+    "edge-tts-universal": "^1.4.0",
+    "mpg123-decoder": "^1.0.3",
+    "sherpa-onnx-node": "^1.13.5"
+  }
+}

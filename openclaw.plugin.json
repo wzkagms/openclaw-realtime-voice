@@ -1,0 +1,45 @@
+{
+  "id": "tts-plugin",
+  "name": "TTS Plugin Realtime Voice",
+  "description": "Realtime voice provider for OpenClaw: browser mic -> sherpa STT -> LLM -> edge-tts -> audio playback",
+  "version": "1.0.0",
+  "providers": ["tts-plugin"],
+  "contracts": {
+    "realtimeVoiceProviders": ["tts-plugin"]
+  },
+  "activation": {
+    "onStartup": false
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "baseUrl": {
+        "type": "string",
+        "description": "OpenAI-compatible LLM endpoint base URL",
+        "default": "https://api.deepseek.com/v1"
+      },
+      "apiKey": {
+        "type": "string",
+        "description": "LLM API key (never sent to browser; ephemeral credentials only)"
+      },
+      "model": {
+        "type": "string",
+        "description": "LLM model id",
+        "default": "deepseek-chat"
+      }
+    }
+  },
+  "uiHints": {
+    "apiKey": {
+      "sensitive": true,
+      "label": "LLM API Key"
+    },
+    "baseUrl": {
+      "label": "LLM Base URL"
+    },
+    "model": {
+      "label": "LLM Model"
+    }
+  }
+}
