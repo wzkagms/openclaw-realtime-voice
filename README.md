@@ -118,10 +118,23 @@ models/
 
 启动时校验文件存在，缺失会报错。模型变更后需重启 gateway（识别器单例跨会话常驻）。
 
-## 费用说明
+## 费用说明（为什么零成本）
 
-- **LLM**：默认使用 opencode-go 付费 API（或自备任意 OpenAI 兼容端点，通过 `providerConfig` 配置）
-- **TTS**：edge-tts 免费服务（微软 Edge 在线语音合成）
+**核心设计动机：不想买、也不需要任何云端 TTS/STT key。**
+
+插件通过 SDK 官方扩展点 `registerRealtimeVoiceProvider` 注册为 OpenClaw 的自定义 realtime voice provider——对 OpenClaw 来说它只是一个普通 provider，但实际全链路绕开了所有付费语音服务：
+
+| 环节 | 常规方案 | 本插件 | 成本 |
+|---|---|---|---|
+| STT | deepgram / openai / elevenlabs（按分钟付费） | **sherpa-onnx 本地流式识别**（~190MB 模型常驻） | ¥0 |
+| LLM | 各家 API | opencode-go 订阅或自备 OpenAI 兼容端点 | 订阅内 |
+| TTS | elevenlabs / openai TTS（$22+/月） | **edge-tts 免费合成**（微软 Edge 在线语音） | ¥0 |
+
+**因此：不需要 OpenAI API key，不需要 deepgram/elevenlabs 等任何语音服务 key。** 只需要一个 LLM 端点（默认 opencode-go，或任意 OpenAI 兼容端点），其余全部本地/免费。
+
+- **LLM**：默认 opencode-go 付费 API（或自备任意 OpenAI 兼容端点，通过 `providerConfig` 配置）
+- **STT**：sherpa-onnx 本地推理，无 API 调用
+- **TTS**：edge-tts 免费服务（微软 Edge 在线语音合成），无 API key
 
 ## 测试
 
